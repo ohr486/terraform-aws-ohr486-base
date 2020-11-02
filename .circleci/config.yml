@@ -22,7 +22,7 @@ set_terraform_env: &set_terraform_env
   run:
     name: set terraform env
     command: |
-      mkdir ~p ~/.aws
+      mkdir -p ~/.aws
       echo "[ohr486base-terraform]" > ~/.aws/credentials
       echo "aws_access_key_id = ${TERRAFORM_AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
       echo "aws_secret_access_key = ${TERRAFORM_AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
