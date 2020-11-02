@@ -6,7 +6,8 @@ defafult_config: &default_config
     - image: hashicorp/terraform:0.13.5
   working_directory: ~/project
 
-repo_cache_key: &repo_cache_key v1-repo-{{ .Branch }}-{{ .Revision }}
+repo_cache_key: &repo_cache_key
+  v1-repo-{{ .Branch }}-{{ .Revision }}
 
 restore_repo: &restore_repo
   restore_cache:
@@ -16,7 +17,7 @@ save_repo: &save_repo
   save_cache:
     key: *repo_cache_key
     paths:
-      - ~/project
+      - *working_directory
 
 set_terraform_env: &set_terraform_env
   run:
