@@ -1,13 +1,89 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-# Use a package of configuration called an orb.
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
-# Orchestrate or schedule a set of jobs
+
+references:
+defafult_config: &default_config
+  docker:
+    - image: hashicorp/terraform:0.13.5
+  working_directory: ~/project
+
+repo_cache_key: &repo_cache_key v1-repo-{{ .Branch }}-{{ .Revision }}
+
+restore_repo: &restore_repo
+  restore_cache:
+    key: *repo_cache_key
+
+save_repo: &save_repo
+  restore_cache:
+    key: *repo_cache_key
+    paths:
+      - ~/project
+
+set_terraform_env: &set_terraform_env
+  run:
+    name: set terraform env
+    command: |
+      mkdir ~p ~/.aws
+      echo "[ohr486base-terraform]" > ~/.aws/credentials
+      echo "aws_access_key_id = ${TERRAFORM_AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
+      echo "aws_secret_access_key = ${TERRAFORM_AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
+      echo "region = ap-northeast-1" >> ~/.aws/credentials
+
+terraform_init: &terraform_init
+  run:
+    name: terraform init
+    command: |
+      cd ~/project
+      terraform init
+
+jobs:
+  terraform_fmt_validate:
+    <<: *default_config
+    steps:
+      - checkout
+      - *set_terraform_env
+      - run:
+          name: terraform fmt validate
+          command: |
+            cd ~/project
+            terraform init
+            terraform fmt
+            terraform validate
+      - *save_repo
+
+  terraform_plan:
+    <<: *default_config
+    steps:
+      - *restore_repo
+      - *set_terraform_env
+      - *terraform_init
+      - run:
+          name: terraform plan
+          command: |
+            cd ~/project
+            terraform plan
+
+  terraform_apply:
+    <<: *default_config
+    steps:
+      - *restore_repo
+      - *set_terraform_env
+      - *terraform_init
+      - run:
+          name: terraform apply
+          command: |
+            cd ~/project
+            terraform plan
+
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  deploy:
     jobs:
-      - welcome/run
+      - terraform_fmt_validate
+      - terraform_plan:
+          requires:
+            - terraform_fmt_validate
+      - terraform_apply:
+          filters:
+            branches:
+              only: main
+          requires:
+            - terraform plan
