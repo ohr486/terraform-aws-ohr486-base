@@ -53,7 +53,8 @@ jobs:
   terraform_plan:
     <<: *default_config
     steps:
-      - *restore_repo
+      #- *restore_repo
+      - checkout
       - *set_terraform_env
       - *terraform_init
       - run:
