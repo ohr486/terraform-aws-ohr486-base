@@ -1,10 +1,14 @@
 version: 2.1
 
 references:
+
+working_directory: &working_directory
+  ~/project
+
 defafult_config: &default_config
   docker:
     - image: hashicorp/terraform:0.13.5
-  working_directory: ~/project
+  working_directory: *working_directory
 
 repo_cache_key: &repo_cache_key
   v1-repo-{{ .Branch }}-{{ .Revision }}
