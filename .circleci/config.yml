@@ -41,11 +41,11 @@ jobs:
     steps:
       - checkout
       - *set_terraform_env
+      - *terraform_init
       - run:
           name: terraform fmt validate
           command: |
             cd ~/project
-            terraform init
             terraform fmt
             terraform validate
       - *save_repo
@@ -53,10 +53,8 @@ jobs:
   terraform_plan:
     <<: *default_config
     steps:
-      #- *restore_repo
-      - checkout
+      - *restore_repo
       - *set_terraform_env
-      - *terraform_init
       - run:
           name: terraform plan
           command: |
@@ -68,7 +66,6 @@ jobs:
     steps:
       - *restore_repo
       - *set_terraform_env
-      - *terraform_init
       - run:
           name: terraform apply
           command: |
