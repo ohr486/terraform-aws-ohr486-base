@@ -64,6 +64,8 @@ jobs:
           name: terraform plan
           command: |
             cd ~/project
+            pwd
+            ls -alh
             terraform plan
 
   terraform_apply:
