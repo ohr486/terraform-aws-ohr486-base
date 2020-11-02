@@ -75,6 +75,7 @@ jobs:
             terraform plan
 
 workflows:
+  version: 2
   deploy:
     jobs:
       - terraform_fmt_validate
