@@ -13,7 +13,7 @@ restore_repo: &restore_repo
     key: *repo_cache_key
 
 save_repo: &save_repo
-  restore_cache:
+  save_cache:
     key: *repo_cache_key
     paths:
       - ~/project
