@@ -75,7 +75,7 @@ jobs:
           name: terraform apply
           command: |
             cd ~/project
-            terraform plan
+            terraform apply --auto-approve
 
 workflows:
   version: 2
