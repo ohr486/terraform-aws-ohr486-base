@@ -1,16 +1,74 @@
 ## VPC
-module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
 
-  name   = "ohr486base"
-  cidr   = "10.30.0.0/16"
-
-  azs             = ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"]
-  private_subnets = ["10.30.1.0/24", "10.30.2.0/24", "10.30.3.0/24"]
-  public_subnets  = ["10.30.101.0/24", "10.30.102.0/24", "10.30.103.0/24"]
-
+resource "aws_vpc" "ohr486base" {
+  cidr_block = local.cidr
+  enable_dns_support = true
+  enable_dns_hostnames = true
   tags = {
     Name     = "ohr486base-vpc"
-    Resource = "ohr486base"
+    Resource = local.resource
   }
 }
+
+## Subnet
+
+resource "aws_subnet" "ohr486base_public1" {
+  vpc_id = aws_vpc.ohr486base.id
+  availability_zone = "ap-northeast-1a"
+  cidr_block = cidrsubnet(local.cidr, 4, 0)
+  tags = {
+    Name     = "ohr486base-public1"
+    Resource = local.resource
+  }
+}
+
+resource "aws_subnet" "ohr486base_public2" {
+  vpc_id = aws_vpc.ohr486base.id
+  availability_zone = "ap-northeast-1c"
+  cidr_block = cidrsubnet(local.cidr, 4, 1)
+  tags = {
+    Name     = "ohr486base-public2"
+    Resource = local.resource
+  }
+}
+
+resource "aws_subnet" "ohr486base_public3" {
+  vpc_id = aws_vpc.ohr486base.id
+  availability_zone = "ap-northeast-1d"
+  cidr_block = cidrsubnet(local.cidr, 4, 2)
+  tags = {
+    Name     = "ohr486base-public3"
+    Resource = local.resource
+  }
+}
+
+resource "aws_subnet" "ohr486base_private1" {
+  vpc_id = aws_vpc.ohr486base.id
+  availability_zone = "ap-northeast-1a"
+  cidr_block = cidrsubnet(local.cidr, 4, 3)
+  tags = {
+    Name     = "ohr486base-private1"
+    Resource = local.resource
+  }
+}
+
+resource "aws_subnet" "ohr486base_private2" {
+  vpc_id = aws_vpc.ohr486base.id
+  availability_zone = "ap-northeast-1c"
+  cidr_block = cidrsubnet(local.cidr, 4, 4)
+  tags = {
+    Name     = "ohr486base-private2"
+    Resource = local.resource
+  }
+}
+
+resource "aws_subnet" "ohr486base_private3" {
+  vpc_id = aws_vpc.ohr486base.id
+  availability_zone = "ap-northeast-1d"
+  cidr_block = cidrsubnet(local.cidr, 4, 5)
+  tags = {
+    Name     = "ohr486base-private3"
+    Resource = local.resource
+  }
+}
+
