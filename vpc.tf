@@ -5,7 +5,7 @@ resource "aws_vpc" "ohr486base" {
   enable_dns_support = true
   enable_dns_hostnames = true
   tags = {
-    Name     = "ohr486base-vpc"
+    Name     = "${local.resource}-vpc"
     Resource = local.resource
   }
 }
@@ -17,7 +17,7 @@ resource "aws_subnet" "ohr486base_public1" {
   availability_zone = "ap-northeast-1a"
   cidr_block = cidrsubnet(local.cidr, 4, 0)
   tags = {
-    Name     = "ohr486base-public1"
+    Name     = "${local.resource}-public1"
     Resource = local.resource
   }
 }
@@ -27,7 +27,7 @@ resource "aws_subnet" "ohr486base_public2" {
   availability_zone = "ap-northeast-1c"
   cidr_block = cidrsubnet(local.cidr, 4, 1)
   tags = {
-    Name     = "ohr486base-public2"
+    Name     = "${local.resource}-public2"
     Resource = local.resource
   }
 }
@@ -37,7 +37,7 @@ resource "aws_subnet" "ohr486base_public3" {
   availability_zone = "ap-northeast-1d"
   cidr_block = cidrsubnet(local.cidr, 4, 2)
   tags = {
-    Name     = "ohr486base-public3"
+    Name     = "${local.resource}-public3"
     Resource = local.resource
   }
 }
@@ -47,7 +47,7 @@ resource "aws_subnet" "ohr486base_private1" {
   availability_zone = "ap-northeast-1a"
   cidr_block = cidrsubnet(local.cidr, 4, 3)
   tags = {
-    Name     = "ohr486base-private1"
+    Name     = "${local.resource}-private1"
     Resource = local.resource
   }
 }
@@ -57,7 +57,7 @@ resource "aws_subnet" "ohr486base_private2" {
   availability_zone = "ap-northeast-1c"
   cidr_block = cidrsubnet(local.cidr, 4, 4)
   tags = {
-    Name     = "ohr486base-private2"
+    Name     = "${local.resource}-private2"
     Resource = local.resource
   }
 }
@@ -67,8 +67,31 @@ resource "aws_subnet" "ohr486base_private3" {
   availability_zone = "ap-northeast-1d"
   cidr_block = cidrsubnet(local.cidr, 4, 5)
   tags = {
-    Name     = "ohr486base-private3"
+    Name     = "${local.resource}-private3"
     Resource = local.resource
   }
 }
 
+## Gateway
+
+resource "aws_internet_gateway" "ohr486base" {
+  vpc_id = aws_vpc.ohr486base.id
+  tags = {
+    Name     = "${local.resource}-igw"
+    Resource = local.resource
+  }
+}
+
+## Route
+
+resource "aws_route_table" "ohr486base-public" {
+  vpc_id = aws_vpc.ohr486base.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.ohr486base.id
+  }
+  tags = {
+    Name     = "${local.resource}-public"
+    Resource = local.resource
+  }
+}
