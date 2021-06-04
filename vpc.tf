@@ -111,3 +111,23 @@ resource "aws_route_table_association" "ohr486base_public3" {
   subnet_id      = aws_subnet.ohr486base_public3.id
 }
 
+## DB Subnet
+
+resource "aws_db_subnet_group" "ohr486base_public" {
+  name = "${local.resource}-public"
+  subnet_ids = [aws_subnet.ohr486base_public1.id, aws_subnet.ohr486base_public2.id, aws_subnet.ohr486base_public3.id]
+  tags = {
+    Name     = "${local.resource}-public"
+    Resource = local.resource
+  }
+}
+
+#resource "aws_db_subnet_group" "ohr486base_private" {
+#  name = "${local.resource}-private"
+#  subnet_ids = [aws_subnet.ohr486base_private1.id, aws_subnet.ohr486base_private2.id, aws_subnet.ohr486base_private3.id]
+#  tags = {
+#    Name     = "${local.resource}-private"
+#    Resource = local.resource
+#  }
+#}
+

@@ -55,3 +55,20 @@ resource "aws_security_group" "mysql" {
 }
 
 
+## DB Security Group
+
+### MySQL
+
+resource "aws_db_security_group" "mysql" {
+  name        = "${local.resource}-mysql"
+
+  ingress {
+    cidr = local.cidr
+  }
+
+  tags = {
+    Name     = "${local.resource}-mysql"
+    Resource = local.resource
+  }
+}
+
