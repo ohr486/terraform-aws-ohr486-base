@@ -1,5 +1,4 @@
 provider "aws" {
-  version                 = "~> 3.44"
   region                  = "ap-northeast-1"
   shared_credentials_file = "~/.aws/credentials"
   profile                 = "ohr486base-terraform" # SET YOUR PROFILE
@@ -18,7 +17,7 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      version = "~> 3.0"
+      version = "~> 3.44"
     }
   }
 }
