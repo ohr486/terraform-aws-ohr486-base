@@ -84,7 +84,7 @@ resource "aws_internet_gateway" "ohr486base" {
 
 ## Route
 
-resource "aws_route_table" "ohr486base-public" {
+resource "aws_route_table" "ohr486base_public" {
   vpc_id = aws_vpc.ohr486base.id
   route {
     cidr_block = "0.0.0.0/0"
@@ -95,3 +95,19 @@ resource "aws_route_table" "ohr486base-public" {
     Resource = local.resource
   }
 }
+
+resource "aws_route_table_association" "ohr486base_public1" {
+  route_table_id = aws_route_table.ohr486base_public.id
+  subnet_id      = aws_subnet.ohr486base_public1.id
+}
+
+resource "aws_route_table_association" "ohr486base_public2" {
+  route_table_id = aws_route_table.ohr486base_public.id
+  subnet_id      = aws_subnet.ohr486base_public2.id
+}
+
+resource "aws_route_table_association" "ohr486base_public3" {
+  route_table_id = aws_route_table.ohr486base_public.id
+  subnet_id      = aws_subnet.ohr486base_public3.id
+}
+
