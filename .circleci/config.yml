@@ -83,7 +83,6 @@ jobs:
           event: always
 
 workflows:
-  version: 2
   deploy:
     jobs:
       - terraform_fmt_validate
