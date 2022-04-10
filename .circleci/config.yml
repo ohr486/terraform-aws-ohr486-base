@@ -54,10 +54,6 @@ jobs:
             cd ~/project
             terraform fmt
             terraform validate
-      - run:
-          name: install curl
-          command: |
-            apk --no-cache add curl
       - *save_repo
 
   terraform_plan:
@@ -65,6 +61,10 @@ jobs:
     steps:
       - *restore_repo
       - *set_terraform_env
+      - run:
+          name: install curl
+          command: |
+            apk --no-cache add curl
       - run:
           name: terraform plan
           command: |
@@ -78,6 +78,10 @@ jobs:
     steps:
       - *restore_repo
       - *set_terraform_env
+      - run:
+          name: install curl
+          command: |
+            apk --no-cache add curl
       - run:
           name: terraform apply
           command: |
