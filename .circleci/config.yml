@@ -1,6 +1,7 @@
 version: 2.1
 
-references:
+orbs:
+  slack: circleci/slack@4.9.3
 
 working_directory: &working_directory
   ~/project
@@ -61,10 +62,16 @@ jobs:
       - *restore_repo
       - *set_terraform_env
       - run:
+          name: install curl
+          command: |
+            apk --no-cache add curl
+      - run:
           name: terraform plan
           command: |
             cd ~/project
             terraform plan
+      - slack/notify:
+          event: always
 
   terraform_apply:
     <<: *default_config
@@ -72,20 +79,27 @@ jobs:
       - *restore_repo
       - *set_terraform_env
       - run:
+          name: install curl
+          command: |
+            apk --no-cache add curl
+      - run:
           name: terraform apply
           command: |
             cd ~/project
             terraform apply --auto-approve
+      - slack/notify:
+          event: always
 
 workflows:
-  version: 2
   deploy:
     jobs:
       - terraform_fmt_validate
       - terraform_plan:
+          context: ohr486-circleci-notification
           requires:
             - terraform_fmt_validate
       - terraform_apply:
+          context: ohr486-circleci-notification
           filters:
             branches:
               only: main
