@@ -54,6 +54,10 @@ jobs:
             cd ~/project
             terraform fmt
             terraform validate
+      - run:
+          name: install curl
+          command: |
+            apk --no-cache add curl
       - *save_repo
 
   terraform_plan:
