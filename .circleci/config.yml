@@ -29,7 +29,7 @@ set_terraform_env: &set_terraform_env
     name: set terraform env
     command: |
       mkdir -p ~/.aws
-      echo "[ohr486base-terraform]" > ~/.aws/credentials
+      echo "[ohr486-aws-base-terraform]" > ~/.aws/credentials
       echo "aws_access_key_id = ${TERRAFORM_AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
       echo "aws_secret_access_key = ${TERRAFORM_AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
       echo "region = ap-northeast-1" >> ~/.aws/credentials
